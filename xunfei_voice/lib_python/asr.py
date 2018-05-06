@@ -1,8 +1,9 @@
+#coding: utf-8
 from ctypes import *  
-import time  
-   
+import time
+
  # 调用动态链接库  
-dll = cdll.LoadLibrary("libmsc.so")  
+dll = cdll.LoadLibrary("./libmsc.so")  
  #登录参数，apppid一定要和你的下载SDK对应  
 login_params = b"appid = 5ae53cbc, work_dir = ."  
    
@@ -15,7 +16,8 @@ MSP_AUDIO_SAMPLE_CONTINUE = 2
 MSP_AUDIO_SAMPLE_LAST = 4  
 MSP_REC_STATUS_COMPLETE = 5  
  # 你的语音文件路径  
-filename = "radio.wav"  
+# filename = "testAudio.wav"  
+filename = "output.wav" 
    
 class Msp:  
     def __init__(self):  
@@ -42,8 +44,7 @@ class Msp:
         #piceLne = FRAME_LEN * 20  
         piceLne = 1638*2  
         epStatus = c_int(0)  
-        recogStatus = c_int(0)  
-   
+        recogStatus = c_int(0)
         wavFile = open(audiofile, 'rb')  
         wavData = wavFile.read(piceLne)  
    
@@ -68,13 +69,14 @@ class Msp:
         # -- 获取音频  
         laststr = ''  
         counter = 0  
-        while recogStatus.value != MSP_REC_STATUS_COMPLETE:  
+        while recogStatus.value != MSP_REC_STATUS_COMPLETE: 
             ret = c_int()  
             dll.QISRGetResult.restype = c_char_p  
-            retstr = dll.QISRGetResult(sessionID, byref(recogStatus), 0, byref(ret))  
+            retstr = dll.QISRGetResult(sessionID, byref(recogStatus), 0, byref(ret))
             if retstr is not None:  
-                laststr += retstr.decode()  
-                # print(laststr)  
+                print(retstr)
+                # laststr += retstr.decode()  
+                laststr += str(retstr)
             # print('ret:', ret.value, 'recogStatus:', recogStatus.value)  
             counter += 1  
             time.sleep(0.2)  
@@ -83,7 +85,6 @@ class Msp:
                 laststr += '讯飞语音识别失败'  
                 break  
    
-        # print(laststr)  
         ret = dll.QISRSessionEnd(sessionID, '\0')  
         # print('end ret: ', ret)  
         return laststr  
@@ -106,3 +107,4 @@ if __name__ == '__main__':
     # 8000为音频码率  
     res = XF_text(filename, 16000)  
     print(res)  
+
