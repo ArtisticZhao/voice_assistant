@@ -42,6 +42,11 @@ def readFile(filePath):
     return data
 
 
+def aiui():
+    r = requests.post(URL, headers=buildHeader(), data=readFile(FILE_PATH))
+    return r.content
+
+
 if __name__ == "__main__":
     r = requests.post(URL, headers=buildHeader(), data=readFile(FILE_PATH))
     print(r.content)
