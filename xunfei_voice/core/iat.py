@@ -1,8 +1,7 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
-import urllib2
 import time
-import urllib
+import urllib.request
 import json
 import hashlib
 import base64
@@ -12,7 +11,7 @@ def iat():
     f = open("output.wav", 'rb')
     file_content = f.read()
     base64_audio = base64.b64encode(file_content)
-    body = urllib.urlencode({'audio': base64_audio})
+    body = urllib.parse.urlencode({'audio': base64_audio})
 
     url = 'http://api.xfyun.cn/v1/service/v1/iat'
     api_key = '0e3131d763b61111106e3131b164d844'
@@ -27,8 +26,8 @@ def iat():
                 'X-Param': x_param,
                 'X-CheckSum': x_checksum}
     print(body)
-    req = urllib2.Request(url, body, x_header)
-    result = urllib2.urlopen(req)
+    req = urllib.request.Request(url, body, x_header)
+    result = urllib.request.urlopen(req)
     result = result.read()
     print(result)
     return result

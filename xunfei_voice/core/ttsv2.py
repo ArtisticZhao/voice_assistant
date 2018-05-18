@@ -8,8 +8,8 @@ import struct
 
 URL = "http://api.xfyun.cn/v1/service/v1/tts"
 AUE = "raw"
-APPID = ""
-API_KEY = ""
+APPID = "5ae9b166"
+API_KEY = "0bc55dfd7956327353fbf2714f81c3cc"
 
 def getHeader():
         curTime = str(int(time.time()))
@@ -29,7 +29,7 @@ def getHeader():
         return header
 
 def getBody(text):
-        data = {'text':text}
+        data = {'text': text}
         return data
 
 def writeFile(file, content):
@@ -38,6 +38,7 @@ def writeFile(file, content):
     f.close()
 
 r = requests.post(URL,headers=getHeader(),data=getBody("科大讯飞是中国最大的智能语音技术提供商"))
+print r.headers
 contentType = r.headers['Content-Type']
 if contentType == "audio/mpeg":
     sid = r.headers['sid']
@@ -45,6 +46,6 @@ if contentType == "audio/mpeg":
         writeFile("audio/"+sid+".wav", r.content)
     else :
         writeFile("audio/"+sid+".mp3", r.content)
-    print "success, sid = " + sid
+    print("success, sid = " + sid)
 else :
     print r.text 
