@@ -3,6 +3,7 @@ import requests
 import time
 import hashlib
 import base64
+from settings import SAVE_REC
 
 URL = "http://openapi.xfyun.cn/v2/aiui"
 APPID = "5ae9b166"
@@ -15,7 +16,7 @@ SCENE = "main"
 RESULT_LEVEL = "complete"
 LAT = "39.938838"
 LNG = "116.368624"
-FILE_PATH = "output.wav"
+FILE_PATH = SAVE_REC
 
 
 def buildHeader():

@@ -5,19 +5,13 @@ import time
 import hashlib
 import base64
 import struct
-import os
-import sys
+from settings import SAVE_PATH, SAVE_FILE
 
 
 URL = "http://api.xfyun.cn/v1/service/v1/tts"
 AUE = "raw"
 APPID = "5ae9b166"
 API_KEY = "0bc55dfd7956327353fbf2714f81c3cc"
-abs_file = os.path.realpath(__file__)
-abs_dir=abs_file[:abs_file.rfind("/")]
-print("abs path is %s" % (abs_dir))
-SAVE_PATH = os.path.join(abs_dir, '..', 'audio_temp')
-print("save path is %s" % (SAVE_PATH))
 
 
 def getHeader():
@@ -56,7 +50,7 @@ def tts(string):
     if contentType == "audio/mpeg":
         sid = r.headers['sid']
         if AUE == "raw":
-            writeFile(SAVE_PATH + 'tts' + ".wav", r.content)
+            writeFile(SAVE_FILE, r.content)
         else:
             writeFile(SAVE_PATH + 'tts' + ".mp3", r.content)
         print("success, sid = " + sid)

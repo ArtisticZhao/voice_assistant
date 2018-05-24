@@ -2,11 +2,12 @@
 from pyaudio import PyAudio, paInt16
 import numpy as np
 import wave
+from settings import SAVE_REC
 
 
 class recoder:
     NUM_SAMPLES = 2000  # pyaudio内置缓冲大小
-    SAMPLING_RATE = 8000  # 取样频率
+    SAMPLING_RATE = 16000  # 取样频率
     LEVEL = 500  # 声音保存的阈值
     COUNT_NUM = 20  # NUM_SAMPLES个取样之内出现COUNT_NUM个大于LEVEL的取样则记录声音
     SAVE_LENGTH = 8  # 声音记录的最小长度：SAVE_LENGTH * NUM_SAMPLES 个取样
@@ -75,6 +76,9 @@ class recoder:
                     return True
                 else:
                     return False
+    def recode_wav(self):
+        self.recoder()
+        self.savewav(SAVE_REC)
 
 
 if __name__ == "__main__":
