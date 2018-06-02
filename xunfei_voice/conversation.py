@@ -5,7 +5,8 @@ tts_play()：
 args： string 想要说的话， 自动调用
 '''
 import json
-import chardet
+import time
+from core.iat import iat
 from core.WebaiuiDemo import aiui
 from core.ttsv2 import tts
 from core.play_music import play_sound
@@ -17,17 +18,42 @@ class Conversation(object):
     def __init__(self):
         self.islocked = False
         self.iat_recoder = recoder()
+        self.isconversation = False
+
+    def pre_conversation(self):
+        res = iat()
+        res = json.loads(res, encoding="UTF-8")
+        if int(res['code']) == 0:
+            data = res['data']
+            keywords = u'狗'
+            if data.find(keywords) != -1:
+                print 'start conversation'
+                self.isconversation = True
+            else:
+                print 'waiting'
 
     def get_a_conversation(self):
-        self.iat_recoder.recode_wav()
         x_ans = aiui()
         x_ans = json.loads(x_ans, encoding="UTF-8")
-        # print chardet.detect(x_ans)
-        # f_ans = json.dumps(x_ans, sort_keys=True, indent=4, separators=(',', ': '), ensure_ascii=False)
-        text_ans = x_ans['data'][-1]['intent']['answer']['text']
-        # print json.dumps(temp, sort_keys=True, indent=4, separators=(',', ': '), ensure_ascii=False)
-        print text_ans
-        self.tts_play(text_ans)
+        if int(x_ans['code']) == 0:
+            # print chardet.detect(x_ans)
+            # f_ans = json.dumps(x_ans, sort_keys=True, indent=4, separators=(',', ': '), ensure_ascii=False)
+            # print f_ans
+            intent_res = x_ans['data'][-1]['intent']
+            # print json.dumps(temp, sort_keys=True, indent=4, separators=(',', ': '), ensure_ascii=False)
+            if intent_res.get('answer') is not None:
+                text_ans = intent_res['answer']['text']
+                print text_ans
+                self.tts_play(text_ans)
+            else:
+                print 'dont understand'
+        else:
+            print json.dumps(
+                x_ans,
+                sort_keys=True,
+                indent=4,
+                separators=(',', ': '),
+                ensure_ascii=False)
 
     def tts_play(self, string):
         if not self.islocked:
@@ -40,9 +66,16 @@ class Conversation(object):
         else:
             print('waiting')
 
+
 if __name__ == '__main__':
-    # get_a_conversation()
     c = Conversation()
     # c.tts_play('我是H-I-T狗')
-    while(True):
-        c.get_a_conversation()
+    while (True):
+        c.iat_recoder.recode_wav()
+        c.isconversation = True
+        if c.isconversation:
+            c.get_a_conversation()
+        else:
+            print "pre conv"
+            c.pre_conversation()
+        time.sleep(1)
