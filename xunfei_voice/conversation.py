@@ -72,7 +72,7 @@ if __name__ == '__main__':
     # c.tts_play('我是H-I-T狗')
     while (True):
         c.iat_recoder.recode_wav()
-        c.isconversation = True
+        # c.isconversation = True
         if c.isconversation:
             c.get_a_conversation()
         else:
