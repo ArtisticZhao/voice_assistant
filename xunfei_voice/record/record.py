@@ -81,8 +81,10 @@ class recoder:
         have_wav = self.recoder()
         if have_wav:
             self.savewav(SAVE_REC)
+            return True
         else:
             print "no audio record"
+            return False
 
 
 if __name__ == "__main__":
