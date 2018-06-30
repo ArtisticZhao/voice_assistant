@@ -40,13 +40,14 @@ class Conversation(object):
             # f_ans = json.dumps(x_ans, sort_keys=True, indent=4, separators=(',', ': '), ensure_ascii=False)
             # print f_ans
             intent_res = x_ans['data'][-1]['intent']
-            '''
+            print "---->>>>>>>>debug0"
             print json.dumps(
                 intent_res,
                 sort_keys=True,
                 indent=4,
                 separators=(',', ': '),
-                ensure_ascii=False)'''
+                ensure_ascii=False)
+            print "debug0<<<<<<<<<-------"
             if intent_res.get('answer') is not None:
                 text_ans = intent_res['answer']['text']
                 print text_ans
@@ -55,12 +56,14 @@ class Conversation(object):
 
                 print 'dont understand'
         else:
+            print "---->>>>>>>>debug1"
             print json.dumps(
                 x_ans,
                 sort_keys=True,
                 indent=4,
                 separators=(',', ': '),
                 ensure_ascii=False)
+            print "debug1<<<<<<<<<-------"
 
     def tts_play(self, string):
         if not self.islocked:
@@ -79,8 +82,9 @@ if __name__ == '__main__':
     c.tts_play('我是H-I-T狗')
     while (True):
         while (not c.iat_recoder.recode_wav()):
-            c.pre_conversation()
-        # c.isconversation = True
+            pass
+
+        c.pre_conversation()
         if c.isconversation:
             c.get_a_conversation()
         else:

@@ -45,7 +45,7 @@ class recoder:
             audio_data = np.fromstring(string_audio_data, dtype=np.short)
             # 计算大于LEVEL的取样的个数
             large_sample_count = np.sum(audio_data > self.LEVEL)
-            print(np.max(audio_data))
+            # print(np.max(audio_data))
             # 如果个数大于COUNT_NUM，则至少保存SAVE_LENGTH个块
             if large_sample_count > self.COUNT_NUM:
                 save_count = self.SAVE_LENGTH
