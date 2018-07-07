@@ -12,13 +12,15 @@ from core.ttsv2 import tts
 from core.play_music import play_sound
 from settings import SAVE_FILE
 from record.record import recoder
-import chardet
+from handler import Voice_Ctrl_Handler
+
 
 class Conversation(object):
     def __init__(self):
         self.islocked = False
         self.iat_recoder = recoder()
         self.isconversation = False
+        self.handler = Voice_Ctrl_Handler()
 
     def pre_conversation(self):
         res = iat()
@@ -36,7 +38,7 @@ class Conversation(object):
     def get_a_conversation(self):
         x_ans = aiui()
         x_ans = json.loads(x_ans, encoding="UTF-8")
-        if int(x_ans['code']) == 0:
+        if int(x_ans['code']) == 0 and x_ans['data'][-1]['intent']:
             # print chardet.detect(x_ans)
             # f_ans = json.dumps(x_ans, sort_keys=True, indent=4, separators=(',', ': '), ensure_ascii=False)
             # print f_ans
@@ -54,6 +56,7 @@ class Conversation(object):
             if intent_res["text"].find(keywords) != -1:
                 self.tts_play('再见！')
                 self.isconversation = False
+            elif self.handler.switch(intent_res["text"]):
                 return
             if intent_res.get('answer') is not None:
                 text_ans = intent_res['answer']['text']
