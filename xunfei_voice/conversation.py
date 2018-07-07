@@ -47,23 +47,26 @@ class Conversation(object):
                 indent=4,
                 separators=(',', ': '),
                 ensure_ascii=False)
-            print "debug0<<<<<<<<<-------"
+            print "debug0<<<<<<<<----"
+            print intent_res["text"]
+            keywords = u'再见'
+            if intent_res["text"].find(keywords) != -1:
+                self.isconversation = True
             if intent_res.get('answer') is not None:
                 text_ans = intent_res['answer']['text']
                 print text_ans
                 self.tts_play(text_ans)
             else:
-
                 print 'dont understand'
         else:
-            print "---->>>>>>>>debug1"
+            print "---->>>>>>>>error code !!!!!"
             print json.dumps(
                 x_ans,
                 sort_keys=True,
                 indent=4,
                 separators=(',', ': '),
                 ensure_ascii=False)
-            print "debug1<<<<<<<<<-------"
+            print "error code !!!!!<<<<<<<<----"
 
     def tts_play(self, string):
         if not self.islocked:
@@ -83,11 +86,9 @@ if __name__ == '__main__':
     while (True):
         while (not c.iat_recoder.recode_wav()):
             pass
-
-        c.pre_conversation()
         if c.isconversation:
             c.get_a_conversation()
         else:
-            print "pre conv"
-            c.pre_conversation()
+            print "pre conversation"
+        c.pre_conversation()
         time.sleep(1)
