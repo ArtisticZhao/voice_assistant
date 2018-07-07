@@ -12,7 +12,7 @@ from core.ttsv2 import tts
 from core.play_music import play_sound
 from settings import SAVE_FILE
 from record.record import recoder
-
+import chardet
 
 class Conversation(object):
     def __init__(self):
@@ -29,6 +29,7 @@ class Conversation(object):
             if data.find(keywords) != -1:
                 print 'start conversation'
                 self.isconversation = True
+                self.tts_play("你好！")
             else:
                 print 'waiting'
 
@@ -51,7 +52,9 @@ class Conversation(object):
             print intent_res["text"]
             keywords = u'再见'
             if intent_res["text"].find(keywords) != -1:
-                self.isconversation = True
+                self.tts_play('再见！')
+                self.isconversation = False
+                return
             if intent_res.get('answer') is not None:
                 text_ans = intent_res['answer']['text']
                 print text_ans
@@ -88,7 +91,8 @@ if __name__ == '__main__':
             pass
         if c.isconversation:
             c.get_a_conversation()
+            continue
         else:
             print "pre conversation"
-        c.pre_conversation()
+            c.pre_conversation()
         time.sleep(1)
