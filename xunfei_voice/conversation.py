@@ -13,14 +13,63 @@ from core.play_music import play_sound
 from settings import SAVE_FILE
 from record.record import recoder
 from handler import Voice_Ctrl_Handler
-
-
+import encodings
+from socketer import socket_sender
 class Conversation(object):
     def __init__(self):
         self.islocked = False
         self.iat_recoder = recoder()
         self.isconversation = False
         self.handler = Voice_Ctrl_Handler()
+        self.is_getname_mode = False
+        self.sender = socket_sender('localhost', 20001)  # to facenet   
+    
+    def aiui_iat(self):
+        while(not self.iat_recoder.recode_wav()):
+                # waiting input
+                pass
+        x_ans = aiui()
+        x_ans = json.loads(x_ans, encoding="UTF-8")
+        if int(x_ans['code']) == 0 and x_ans['data'][-1]['intent']:
+            intent_res = x_ans['data'][-1]['intent']
+            if intent_res:
+                # not none
+                return intent_res['text']
+
+    def get_name(self):
+        print('lock')
+        while(self.is_getname_mode):
+            print "in get name"
+            # get name until ok
+            is_yes_or_no_mode = False
+            if not is_yes_or_no_mode:
+                self.tts_play("请说出您的名字")
+                name_str = self.aiui_iat()
+                while(type(name_str)!=unicode):
+                    self.tts_play("没听清楚请您再说一遍")
+                    name_str = self.aiui_iat()                    
+                name_str = name_str.encode('UTF-8')
+                print name_str
+                #name_str = unichr(name_str)
+                self.tts_play("您叫" + name_str + "么？请回答对或错")
+
+            is_yes_or_no_mode = True
+            yes_or_no = self.aiui_iat()
+            while(type(yes_or_no) != unicode):
+                self.tts_play("没听清楚请您再说一遍")
+                yes_or_no = self.aiui_iat()
+            yes_or_no = str(yes_or_no.encode('UTF-8'))
+            if '对' in yes_or_no:
+                self.is_getname_mode = False
+                self.sender.send_data(name_str)
+            elif '错' in yes_or_no:
+                is_yes_or_no_mode = False
+        print('unlock')
+
+
+
+
+             
 
     def pre_conversation(self):
         res = iat()
@@ -43,14 +92,14 @@ class Conversation(object):
             # f_ans = json.dumps(x_ans, sort_keys=True, indent=4, separators=(',', ': '), ensure_ascii=False)
             # print f_ans
             intent_res = x_ans['data'][-1]['intent']
-            print "---->>>>>>>>debug0"
-            print json.dumps(
-                intent_res,
-                sort_keys=True,
-                indent=4,
-                separators=(',', ': '),
-                ensure_ascii=False)
-            print "debug0<<<<<<<<----"
+            # print "---->>>>>>>>debug0"
+            # print json.dumps(
+            #     intent_res,
+            #     sort_keys=True,
+            #     indent=4,
+            #     separators=(',', ': '),
+            #     ensure_ascii=False)
+            # print "debug0<<<<<<<<----"
             print intent_res["text"]
             keywords = u'再见'
             if intent_res["text"].find(keywords) != -1:
@@ -87,15 +136,18 @@ class Conversation(object):
 
 
 if __name__ == '__main__':
+    
     c = Conversation()
-    c.tts_play('我是H-I-T狗')
-    while (True):
-        while (not c.iat_recoder.recode_wav()):
-            pass
-        if c.isconversation:
-            c.get_a_conversation()
-            continue
-        else:
-            print "pre conversation"
-            c.pre_conversation()
-        time.sleep(1)
+    # c.tts_play('我是H-I-T狗')
+    # while (True):
+    #     while (not c.iat_recoder.recode_wav()):
+    #         pass
+    #     if c.isconversation:
+    #         c.get_a_conversation()
+    #         continue
+    #     else:
+    #         print "pre conversation"
+    #         c.pre_conversation()
+    #     time.sleep(1)
+    c.is_getname_mode = True
+    c.get_name()
