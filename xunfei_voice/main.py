@@ -42,16 +42,16 @@ if __name__ == '__main__':
     up_ser.go()
 
     while (True):
-
-        while (not c.iat_recoder.recode_wav()):
-            pass
-        if c.is_getname_mode:
-            print("getname mode")
-            c.get_name()
-        elif c.isconversation:
-            c.get_a_conversation()
-            continue
-        else:
-            print "pre conversation"
-            c.pre_conversation()
-        time.sleep(1)
+        pass
+        #while (not c.iat_recoder.recode_wav()):
+        #    pass
+        #if c.is_getname_mode:
+        #    print("getname mode")
+        #    c.get_name()
+        #elif c.isconversation:
+        #    c.get_a_conversation()
+        #    continue
+        #else:
+        #    print "pre conversation"
+        #    c.pre_conversation()
+        #time.sleep(1)

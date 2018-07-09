@@ -31,6 +31,7 @@ class recoder:
             channels=1,
             rate=self.SAMPLING_RATE,
             input=True,
+            # input_device_index=0,
             frames_per_buffer=self.NUM_SAMPLES)
         save_count = 0
         save_buffer = []

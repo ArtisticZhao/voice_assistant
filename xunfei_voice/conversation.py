@@ -26,8 +26,8 @@ class Conversation(object):
     
     def aiui_iat(self):
         while(not self.iat_recoder.recode_wav()):
-                # waiting input
-                pass
+            # waiting input
+            pass
         x_ans = aiui()
         x_ans = json.loads(x_ans, encoding="UTF-8")
         if int(x_ans['code']) == 0 and x_ans['data'][-1]['intent']:
@@ -35,6 +35,12 @@ class Conversation(object):
             if intent_res:
                 # not none
                 return intent_res['text']
+            else:
+                return ''
+        else:
+            print x_ans
+            return ''
+            
 
     def get_name(self):
         print('lock')
@@ -72,17 +78,25 @@ class Conversation(object):
              
 
     def pre_conversation(self):
-        res = iat()
-        res = json.loads(res, encoding="UTF-8")
-        if int(res['code']) == 0:
-            data = res['data']
-            keywords = u'狗'
-            if data.find(keywords) != -1:
-                print 'start conversation'
-                self.isconversation = True
-                self.tts_play("你好！")
-            else:
-                print 'waiting'
+        # res = iat()
+        # res = json.loads(res, encoding="UTF-8")
+        res = self.aiui_iat()
+        print res
+        #if int(res['code']) == 0:
+        #    data = res['data']
+        #    keywords = u'狗'
+        #    if data.find(keywords) != -1:
+        #        print 'start conversation'
+        #        self.isconversation = True
+        #        self.tts_play("你好！")
+        #    else:
+        #        print 'waiting'
+        if res.find(u'狗') != -1:
+            print 'start conversation'
+            self.isconversation = True
+            self.tts_play('你好！')
+        else:
+            print 'waiting'
 
     def get_a_conversation(self):
         x_ans = aiui()
