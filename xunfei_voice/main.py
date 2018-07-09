@@ -4,8 +4,8 @@ import time
 import threading
 from conversation import Conversation
 
-
 c = Conversation()
+
 
 class Handler(BaseRequestHandler):
     def handle(self):
@@ -43,15 +43,15 @@ if __name__ == '__main__':
 
     while (True):
         pass
-        #while (not c.iat_recoder.recode_wav()):
-        #    pass
-        #if c.is_getname_mode:
-        #    print("getname mode")
-        #    c.get_name()
-        #elif c.isconversation:
-        #    c.get_a_conversation()
-        #    continue
-        #else:
-        #    print "pre conversation"
-        #    c.pre_conversation()
-        #time.sleep(1)
+        while (not c.iat_recoder.recode_wav()):
+            pass
+        if c.is_getname_mode:
+            print("getname mode")
+            c.get_name()
+        elif c.isconversation:
+            c.get_a_conversation()
+            continue
+        else:
+            print "pre conversation"
+            c.pre_conversation()
+        time.sleep(1)
