@@ -4,12 +4,13 @@ import time
 import hashlib
 import base64
 from settings import SAVE_REC
+from core import security
 
 URL = "http://openapi.xfyun.cn/v2/aiui"
-APPID = "5ae9b166"
-API_KEY = "e397d6acc6004afea833fc407fed2ed2"
+APPID = security.AIUI_ID
+API_KEY = security.AIUI_KEY
 AUE = "raw"
-AUTH_ID = "2894c985bf8b1111c6728db79d3479ae"
+AUTH_ID = security.AIUI_AUTH_ID
 DATA_TYPE = "audio"
 SAMPLE_RATE = "16000"
 SCENE = "main"
@@ -21,7 +22,7 @@ FILE_PATH = SAVE_REC
 
 def buildHeader():
     curTime = str(int(time.time()))
-    param = "{\"result_level\":\""+RESULT_LEVEL+"\",\"auth_id\":\""+AUTH_ID+"\",\"data_type\":\""+DATA_TYPE+"\",\"sample_rate\":\""+SAMPLE_RATE+"\",\"scene\":\""+SCENE+"\",\"lat\":\""+LAT+"\",\"lng\":\""+LNG+"\"}"
+    param = "{\"result_level\":\"" + RESULT_LEVEL + "\",\"auth_id\":\"" + AUTH_ID + "\",\"data_type\":\"" + DATA_TYPE + "\",\"sample_rate\":\"" + SAMPLE_RATE + "\",\"scene\":\"" + SCENE + "\",\"lat\":\"" + LAT + "\",\"lng\":\"" + LNG + "\"}"
     paramBase64 = base64.b64encode(param)
 
     m2 = hashlib.md5()

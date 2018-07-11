@@ -77,7 +77,8 @@ class Conversation(object):
         if x_ans['data'] != 0:
             # 无错误
             data = x_ans['data'][-1]['intent']
-            # debug
+            # print data
+            # # debug
             f_ans = json.dumps(
                 data,
                 sort_keys=True,
@@ -134,13 +135,16 @@ class Conversation(object):
                 print 'dont understand'
         else:
             print "---->>>>>>>>error code !!!!!"
-            j_ans = json.loads(x_ans)
-            print json.dumps(
-                j_ans,
-                sort_keys=True,
-                indent=4,
-                separators=(',', ': '),
-                ensure_ascii=False)
+            try:
+                j_ans = json.loads(x_ans)
+                print json.dumps(
+                    j_ans,
+                    sort_keys=True,
+                    indent=4,
+                    separators=(',', ': '),
+                    ensure_ascii=False)
+            except Exception as e:
+                print e
             print "error code !!!!!<<<<<<<<----"
 
     def tts_play(self, string):

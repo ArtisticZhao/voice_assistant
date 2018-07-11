@@ -4,14 +4,14 @@ import re
 import time
 import hashlib
 import base64
-import struct
-from settings import SAVE_PATH, SAVE_FILE
 
+from settings import SAVE_PATH, SAVE_FILE
+from core import security
 
 URL = "http://api.xfyun.cn/v1/service/v1/tts"
 AUE = "raw"
-APPID = "5ae9b166"
-API_KEY = "0bc55dfd7956327353fbf2714f81c3cc"
+APPID = security.TTS_ID
+API_KEY = security.TTS_KEY
 
 
 def getHeader():
