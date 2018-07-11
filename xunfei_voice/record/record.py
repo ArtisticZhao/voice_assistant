@@ -11,7 +11,7 @@ class recoder:
     LEVEL = REC_LEVEL  # 声音保存的阈值
     COUNT_NUM = 20  # NUM_SAMPLES个取样之内出现COUNT_NUM个大于LEVEL的取样则记录声音
     SAVE_LENGTH = 8  # 声音记录的最小长度：SAVE_LENGTH * NUM_SAMPLES 个取样
-    TIME_COUNT = 60  # 录音时间，单位s
+    TIME_COUNT = 40  # 录音时间，单位s
 
     Voice_String = []
 
@@ -46,7 +46,7 @@ class recoder:
             audio_data = np.fromstring(string_audio_data, dtype=np.short)
             # 计算大于LEVEL的取样的个数
             large_sample_count = np.sum(audio_data > self.LEVEL)
-            # print(np.max(audio_data))
+            print(np.max(audio_data))
             # 如果个数大于COUNT_NUM，则至少保存SAVE_LENGTH个块
             if large_sample_count > self.COUNT_NUM:
                 save_count = self.SAVE_LENGTH

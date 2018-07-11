@@ -12,4 +12,4 @@ SAVE_FILE = os.path.join(SAVE_PATH, 'tts.wav')
 SAVE_REC = os.path.join(SAVE_PATH, 'rec.wav')
 
 # recoder
-REC_LEVEL = 500
+REC_LEVEL = 3000

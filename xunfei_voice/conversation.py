@@ -55,7 +55,7 @@ class Conversation(object):
                 name_str = name_str.encode('UTF-8')
                 print name_str
                 # name_str = unichr(name_str)
-                self.tts_play("您叫" + name_str + "么？请回答对或错")
+                self.tts_play("您叫" + name_str + "么？请回答正确或错误")
 
             is_yes_or_no_mode = True
             yes_or_no = self.aiui_iat()
@@ -63,10 +63,11 @@ class Conversation(object):
                 self.tts_play("没听清楚请您再说一遍")
                 yes_or_no = self.aiui_iat()
             yes_or_no = str(yes_or_no.encode('UTF-8'))
-            if '对' in yes_or_no:
+            if '正确' in yes_or_no:
                 self.is_getname_mode = False
                 self.sender.send_data(name_str)
-            elif '错' in yes_or_no:
+                print "done get face name"
+            elif '错误' in yes_or_no:
                 is_yes_or_no_mode = False
         print('unlock')
 
