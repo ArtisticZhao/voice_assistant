@@ -68,6 +68,7 @@ class Conversation(object):
                     self.is_getname_mode = False
                     self.sender.send_data(name_str)
                     print "done get face name"
+                    break
                 elif '错误' in yes_or_no:
                     is_yes_or_no_mode = False
 
