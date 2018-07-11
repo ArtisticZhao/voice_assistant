@@ -71,25 +71,33 @@ class Conversation(object):
         print('unlock')
 
     def pre_conversation(self):
-        # res = iat()
-        # res = json.loads(res, encoding="UTF-8")
-        res = self.aiui_iat()
-        print res
-        # if int(res['code']) == 0:
-        #    data = res['data']
-        #    keywords = u'狗'
-        #    if data.find(keywords) != -1:
-        #        print 'start conversation'
-        #        self.isconversation = True
-        #        self.tts_play("你好！")
-        #    else:
-        #        print 'waiting'
-        if res.find(u'狗') != -1:
-            print 'start conversation'
-            self.isconversation = True
-            self.tts_play('你好！')
-        else:
-            print 'waiting'
+        x_ans = aiui()
+        x_ans = json.loads(x_ans, encoding="UTF-8")
+
+        if x_ans['data'] != 0:
+            # 无错误
+            data = x_ans['data'][-1]['intent']
+            # debug
+            f_ans = json.dumps(
+                data,
+                sort_keys=True,
+                indent=4,
+                separators=(',', ': '),
+                ensure_ascii=False)
+            print f_ans
+            if data.get('data') is not None:
+                if_hello = data['data']['result'][0]['data'][0]['method']
+                if if_hello == 'hello':
+                    self.isconversation = True
+                    self.tts_play('你好')
+
+        # print res
+        # if res.find(u'狗') != -1:
+        #     print 'start conversation'
+        #     self.isconversation = True
+        #     self.tts_play('你好！')
+        # else:
+        #     print 'waiting'
 
     def get_a_conversation(self):
         x_ans = aiui()
@@ -109,6 +117,7 @@ class Conversation(object):
             #     separators=(',', ': '),
             #     ensure_ascii=False)
             # print "debug0<<<<<<<<----"
+            # 检测是否切换回等待模式
             print intent_res["text"]
             keywords = u'再见'
             if intent_res["text"].find(keywords) != -1:
@@ -116,6 +125,7 @@ class Conversation(object):
                 self.isconversation = False
             elif self.handler.switch(intent_res["text"]):
                 return
+            # 回答
             if intent_res.get('answer') is not None:
                 text_ans = intent_res['answer']['text']
                 print text_ans
@@ -124,8 +134,9 @@ class Conversation(object):
                 print 'dont understand'
         else:
             print "---->>>>>>>>error code !!!!!"
+            j_ans = json.loads(x_ans)
             print json.dumps(
-                x_ans,
+                j_ans,
                 sort_keys=True,
                 indent=4,
                 separators=(',', ': '),
@@ -158,5 +169,7 @@ if __name__ == '__main__':
     #         print "pre conversation"
     #         c.pre_conversation()
     #     time.sleep(1)
-    c.is_getname_mode = True
-    c.get_name()
+    # c.is_getname_mode = True
+    # c.get_name()
+
+    c.pre_conversation()
