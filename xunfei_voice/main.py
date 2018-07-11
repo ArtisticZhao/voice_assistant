@@ -42,8 +42,7 @@ if __name__ == '__main__':
     up_ser.go()
 
     while (True):
-        pass
-        while (not c.iat_recoder.recode_wav() and c.is_getname_mode):
+        while (not c.iat_recoder.recode_wav() and not c.is_getname_mode):
             pass
         if c.is_getname_mode:
             print("getname mode")

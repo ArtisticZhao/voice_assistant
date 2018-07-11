@@ -62,6 +62,7 @@ class Conversation(object):
             while (type(yes_or_no) != unicode):
                 self.tts_play("没听清楚请您再说一遍")
                 yes_or_no = self.aiui_iat()
+            print "yes/no:" + yes_or_no
             yes_or_no = str(yes_or_no.encode('UTF-8'))
             if '正确' in yes_or_no:
                 self.is_getname_mode = False
