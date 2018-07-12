@@ -3,6 +3,7 @@ from pyaudio import PyAudio, paInt16
 import numpy as np
 import wave
 from settings import SAVE_REC, REC_LEVEL
+import logging
 
 
 class recoder:
@@ -25,6 +26,7 @@ class recoder:
         wf.close()
 
     def recoder(self):
+        logging.info('starting recoding')
         pa = PyAudio()
         stream = pa.open(
             format=paInt16,
@@ -46,7 +48,8 @@ class recoder:
             audio_data = np.fromstring(string_audio_data, dtype=np.short)
             # 计算大于LEVEL的取样的个数
             large_sample_count = np.sum(audio_data > self.LEVEL)
-            print(np.max(audio_data))
+            # TODO del this
+            # logging.info(np.max(audio_data))
             # 如果个数大于COUNT_NUM，则至少保存SAVE_LENGTH个块
             if large_sample_count > self.COUNT_NUM:
                 save_count = self.SAVE_LENGTH
@@ -67,13 +70,13 @@ class recoder:
                 if len(save_buffer) > 0:
                     self.Voice_String = save_buffer
                     save_buffer = []
-                    print("Recode a piece of  voice successfully!")
+                    logging.info("Recode a piece of  voice successfully!")
                     return True
             if time_count == 0:
                 if len(save_buffer) > 0:
                     self.Voice_String = save_buffer
                     save_buffer = []
-                    print("Recode a piece of  voice successfully!")
+                    logging.info("Recode a piece of  voice successfully!")
                     return True
                 else:
                     return False
@@ -82,9 +85,10 @@ class recoder:
         have_wav = self.recoder()
         if have_wav:
             self.savewav(SAVE_REC)
+            logging.info('record finished')
             return True
         else:
-            print "no audio record"
+            logging.info("no audio record")
             return False
 
 

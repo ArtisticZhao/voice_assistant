@@ -12,6 +12,7 @@ from settings import SAVE_FILE
 from record.record import recoder
 from handler import Voice_Ctrl_Handler
 from socketer import socket_sender
+import logging
 
 
 class Conversation(object):
@@ -43,7 +44,7 @@ class Conversation(object):
 
     def get_name(self):
         while (self.is_getname_mode):
-            print "in get name"
+            logging.info("in get name")
             # get name until ok
             is_yes_or_no_mode = False
             if not is_yes_or_no_mode:
@@ -68,7 +69,7 @@ class Conversation(object):
                 if '正确' in yes_or_no:
                     self.is_getname_mode = False
                     self.sender.send_data(name_str)
-                    print "done get face name"
+                    logging.info("done get name")
                     break
                 elif '错误' in yes_or_no:
                     is_yes_or_no_mode = False
@@ -95,10 +96,9 @@ class Conversation(object):
                         self.isconversation = True
                         self.tts_play('你好')
                 except Exception as e:
-                    print("hello mode error")
-                    print e
+                    logging.error(e)
             else:
-                print("waitting")
+                logging.info('waitting')
         else:
             f_ans = json.dumps(
                 data,
@@ -135,20 +135,20 @@ class Conversation(object):
                     if if_go_where == 'go_indoor_loc':
                         where = intent_res['data']['result'][0]['data'][1][
                             'location']
-                        print("indoor navi mode in")
-                        print(where)
+                        logging.info('indoor navi mode in')
+                        logging.info(where)
                         self.sender_to_navi.send_data('Goal:' + where)
 
                 except Exception as e:
-                    print("navi mode error")
-                    print e
+                    logging.error("navi mode error")
+                    logging.error(e)
             # 回答
             if intent_res.get('answer') is not None:
                 text_ans = intent_res['answer']['text']
-                print text_ans
+                logging.error(text_ans)
                 self.tts_play(text_ans)
             else:
-                print 'dont understand'
+                logging.error('dont understand')
         else:
             print "---->>>>>>>>error code !!!!!"
             try:
@@ -160,6 +160,7 @@ class Conversation(object):
                     separators=(',', ': '),
                     ensure_ascii=False)
             except Exception as e:
+                logging.error(e)
                 print e
             print "error code !!!!!<<<<<<<<----"
 
