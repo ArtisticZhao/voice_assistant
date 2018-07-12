@@ -22,6 +22,7 @@ class Conversation(object):
         self.handler = Voice_Ctrl_Handler()
         self.is_getname_mode = False
         self.sender = socket_sender('localhost', 20001)  # to facenet
+        self.sender_to_navi = socket_sender('192.168.20.136', 20000)  # to navi
 
     def aiui_iat(self):
         while (not self.iat_recoder.recode_wav()):
@@ -78,9 +79,27 @@ class Conversation(object):
 
         if x_ans['data'] != 0:
             # 无错误
+            f_ans = json.dumps(
+                x_ans,
+                sort_keys=True,
+                indent=4,
+                separators=(',', ': '),
+                ensure_ascii=False)
+            print f_ans
             data = x_ans['data'][-1]['intent']
-            # print data
-            # # debug
+            if data.get('data') is not None:
+                print("here")
+                try:
+                    if_hello = data['data']['result'][0]['data'][0]['method']
+                    if if_hello == 'hello':
+                        self.isconversation = True
+                        self.tts_play('你好')
+                except Exception as e:
+                    print("hello mode error")
+                    print e
+            else:
+                print("waitting")
+        else:
             f_ans = json.dumps(
                 data,
                 sort_keys=True,
@@ -88,19 +107,6 @@ class Conversation(object):
                 separators=(',', ': '),
                 ensure_ascii=False)
             print f_ans
-            if data.get('data') is not None:
-                if_hello = data['data']['result'][0]['data'][0]['method']
-                if if_hello == 'hello':
-                    self.isconversation = True
-                    self.tts_play('你好')
-
-        # print res
-        # if res.find(u'狗') != -1:
-        #     print 'start conversation'
-        #     self.isconversation = True
-        #     self.tts_play('你好！')
-        # else:
-        #     print 'waiting'
 
     def get_a_conversation(self):
         x_ans = aiui()
@@ -112,14 +118,7 @@ class Conversation(object):
             # indent=4, separators=(',', ': '), ensure_ascii=False)
             # print f_ans
             intent_res = x_ans['data'][-1]['intent']
-            # print "---->>>>>>>>debug0"
-            # print json.dumps(
-            #     intent_res,
-            #     sort_keys=True,
-            #     indent=4,
-            #     separators=(',', ': '),
-            #     ensure_ascii=False)
-            # print "debug0<<<<<<<<----"
+
             # 检测是否切换回等待模式
             print intent_res["text"]
             keywords = u'再见'
@@ -128,6 +127,21 @@ class Conversation(object):
                 self.isconversation = False
             elif self.handler.switch(intent_res["text"]):
                 return
+            # 检测是否为室内导航命令
+            if intent_res.get('data') is not None:
+                try:
+                    if_go_where = intent_res['data']['result'][0]['data'][0][
+                        'method']
+                    if if_go_where == 'go_indoor_loc':
+                        where = intent_res['data']['result'][0]['data'][1][
+                            'location']
+                        print("indoor navi mode in")
+                        print(where)
+                        self.sender_to_navi.send_data('Goal:' + where)
+
+                except Exception as e:
+                    print("navi mode error")
+                    print e
             # 回答
             if intent_res.get('answer') is not None:
                 text_ans = intent_res['answer']['text']
