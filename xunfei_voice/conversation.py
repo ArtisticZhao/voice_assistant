@@ -8,7 +8,7 @@ import json
 from core.WebaiuiDemo import aiui
 from core.ttsv2 import tts
 from core.play_music import play_sound
-from settings import SAVE_FILE
+from settings import SAVE_FILE, V_MODE
 from record.record import recoder
 from handler import Voice_Ctrl_Handler
 from socketer import socket_sender
@@ -24,6 +24,7 @@ class Conversation(object):
         self.is_getname_mode = False
         self.sender = socket_sender('localhost', 20001)  # to facenet
         self.sender_to_navi = socket_sender('192.168.20.136', 20000)  # to navi
+        self.vmode = V_MODE
 
     def aiui_iat(self):
         while (not self.iat_recoder.recode_wav()):
@@ -80,16 +81,15 @@ class Conversation(object):
 
         if x_ans['data'] != 0:
             # 无错误
-            f_ans = json.dumps(
-                x_ans,
-                sort_keys=True,
-                indent=4,
-                separators=(',', ': '),
-                ensure_ascii=False)
-            print f_ans
+            # f_ans = json.dumps(
+            #     x_ans,
+            #     sort_keys=True,
+            #     indent=4,
+            #     separators=(',', ': '),
+            #     ensure_ascii=False)
+            # print f_ans
             data = x_ans['data'][-1]['intent']
             if data.get('data') is not None:
-                print("here")
                 try:
                     if_hello = data['data']['result'][0]['data'][0]['method']
                     if if_hello == 'hello':
@@ -167,7 +167,7 @@ class Conversation(object):
     def tts_play(self, string):
         if not self.islocked:
             self.islocked = True  # 加锁
-            audio_name = tts(string)
+            audio_name = tts(string, self.vmode)
             if audio_name is not None:
                 play_sound(SAVE_FILE)
             self.islocked = False  # 解锁

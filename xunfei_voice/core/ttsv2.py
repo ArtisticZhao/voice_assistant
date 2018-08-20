@@ -1,15 +1,25 @@
 # -*- coding: utf-8 -*-
 import requests
-import re
 import time
 import hashlib
 import base64
+import serial
 
-from settings import SAVE_PATH, SAVE_FILE
+from settings import SAVE_PATH, SAVE_FILE, V_MODE, SERI_TO_YY
 from core import security
+
+# gen serial link to tts
+try:
+    ser_to_tts = serial.Serial(SERI_TO_YY, 9600, timeout=0.5)
+except Exception as e:
+    print e
+    ser_to_tts = None
+
+TTS_HEADER = "@TextToSpeech#"  # add '$' to tail
 
 URL = "http://api.xfyun.cn/v1/service/v1/tts"
 AUE = "raw"
+
 APPID = security.TTS_ID
 API_KEY = security.TTS_KEY
 
@@ -43,7 +53,19 @@ def writeFile(file, content):
     f.close()
 
 
-def tts(string):
+def tts(string, mode):
+    if mode == "xf":
+        tts_xf(string)
+    else:
+        tts_ser(string)
+
+
+def tts_ser(string):
+    send_data = TTS_HEADER + string.decode('UTF-8').encode('GB2312') + '$'
+    ser_to_tts.write(send_data)
+
+
+def tts_xf(string):
     r = requests.post(URL, headers=getHeader(), data=getBody(string))
     print r.headers
     contentType = r.headers['Content-Type']

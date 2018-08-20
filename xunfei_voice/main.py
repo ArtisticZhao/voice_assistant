@@ -4,6 +4,7 @@ import time
 import threading
 import logging
 from conversation import Conversation
+import settings
 
 logging.basicConfig(
     level=logging.INFO,
@@ -27,9 +28,18 @@ class Handler(BaseRequestHandler):
                 # get name for facenet
                 print("recv cmd:getname!")
                 c.is_getname_mode = True
+        elif msg.find('mod:') != -1:  # change voice mod
+            if msg == 'mod:tts':
+                print "mode change! xf"
+                c.vmode = "xf"
+            else:
+                c.vmode = "serial"
         else:
             # speak mode
-            c.tts_play(msg)
+            if c.vmode == 'xf':
+                c.tts_play(msg)
+            else:
+                c.tts_play(msg.decode('GB2312').encode('UTF-8'))
 
 
 class upper_socket_server(threading.Thread):

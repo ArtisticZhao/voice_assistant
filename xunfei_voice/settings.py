@@ -13,3 +13,10 @@ SAVE_REC = os.path.join(SAVE_PATH, 'rec.wav')
 
 # recoder
 REC_LEVEL = 3000
+
+# voice mode
+V_MODE = "serial"  # "xf" or "serial"
+
+# serial
+SERI_TO_YY = "/dev/ttyUSB0"
+SERI_TO_SK = "/dev/ttyUSB1"
