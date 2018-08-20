@@ -4,13 +4,12 @@ import time
 import threading
 import logging
 from conversation import Conversation
-import settings
 
 logging.basicConfig(
     level=logging.INFO,
     format=
     '%(asctime)s %(filename)s[line:%(lineno)d] %(levelname)s %(message)s',
-    datefmt='%a, %d %b %Y %H:%M:%S',
+    datefmt='%H:%M:%S',
     filename='info.log',
     filemode='w')
 
@@ -26,13 +25,14 @@ class Handler(BaseRequestHandler):
         if msg.find('cmd:') != -1:  # cmd mode
             if msg == 'cmd:getname':
                 # get name for facenet
-                print("recv cmd:getname!")
+                logging.info("start get name mode")
                 c.is_getname_mode = True
         elif msg.find('mod:') != -1:  # change voice mod
             if msg == 'mod:tts':
-                print "mode change! xf"
+                logging.info("mode change! xf")
                 c.vmode = "xf"
             else:
+                logging.info("mode change! serial")
                 c.vmode = "serial"
         else:
             # speak mode

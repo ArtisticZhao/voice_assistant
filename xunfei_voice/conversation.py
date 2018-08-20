@@ -55,7 +55,7 @@ class Conversation(object):
                     self.tts_play("没听清楚请您再说一遍")
                     name_str = self.aiui_iat()
                 name_str = name_str.encode('UTF-8')
-                print name_str
+                logging.info("get name:" + name_str)
                 # name_str = unichr(name_str)
                 self.tts_play("您叫" + name_str + "么？请回答正确或错误")
 
@@ -65,7 +65,6 @@ class Conversation(object):
                 while (type(yes_or_no) != unicode):
                     self.tts_play("正确或错误?")
                     yes_or_no = self.aiui_iat()
-                print "yes/no:" + yes_or_no
                 yes_or_no = str(yes_or_no.encode('UTF-8'))
                 if '正确' in yes_or_no:
                     self.is_getname_mode = False
@@ -120,7 +119,7 @@ class Conversation(object):
             intent_res = x_ans['data'][-1]['intent']
 
             # 检测是否切换回等待模式
-            print intent_res["text"]
+            logging.info("in conversation:" + intent_res["text"])
             keywords = u'再见'
             if intent_res["text"].find(keywords) != -1:
                 self.tts_play('再见！')
@@ -171,7 +170,6 @@ class Conversation(object):
             if audio_name is not None:
                 play_sound(SAVE_FILE)
             self.islocked = False  # 解锁
-            print('unlock')
         else:
             print('waiting')
 

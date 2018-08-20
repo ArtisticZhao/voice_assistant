@@ -20,3 +20,6 @@ V_MODE = "serial"  # "xf" or "serial"
 # serial
 SERI_TO_YY = "/dev/ttyUSB0"
 SERI_TO_SK = "/dev/ttyUSB1"
+
+# recorder mode
+REC_MODE = 'RELEASE'  # 'DEBUG' to show rec_level
