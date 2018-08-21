@@ -8,7 +8,7 @@ import json
 from core.WebaiuiDemo import aiui
 from core.ttsv2 import tts
 from core.play_music import play_sound
-from settings import SAVE_FILE, V_MODE
+from settings import SAVE_FILE, V_MODE, A_MODE
 from record.record import recoder
 from handler import Voice_Ctrl_Handler
 from socketer import socket_sender
@@ -25,6 +25,7 @@ class Conversation(object):
         self.sender = socket_sender('localhost', 20001)  # to facenet
         self.sender_to_navi = socket_sender('192.168.20.136', 20000)  # to navi
         self.vmode = V_MODE
+        self.aiuimode = A_MODE
 
     def aiui_iat(self):
         while (not self.iat_recoder.recode_wav()):
@@ -145,7 +146,7 @@ class Conversation(object):
             if intent_res.get('answer') is not None:
                 text_ans = intent_res['answer']['text']
                 logging.error(text_ans)
-                self.tts_play(text_ans)
+                self.reply(text_ans)
             else:
                 logging.error('dont understand')
         else:
@@ -172,6 +173,10 @@ class Conversation(object):
             self.islocked = False  # 解锁
         else:
             print('waiting')
+
+    def reply(self, string):
+        if self.aiuimode == 'online':
+            self.tts_play(string)
 
 
 if __name__ == '__main__':

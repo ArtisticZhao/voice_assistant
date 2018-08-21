@@ -16,7 +16,7 @@ REC_LEVEL = 3000
 
 # voice mode
 V_MODE = "serial"  # "xf" or "serial"
-
+A_MODE = "online"
 # serial
 SERI_TO_YY = "/dev/ttyUSB0"
 SERI_TO_SK = "/dev/ttyUSB1"
