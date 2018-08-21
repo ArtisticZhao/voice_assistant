@@ -18,6 +18,15 @@ c = Conversation()
 
 
 class Handler(BaseRequestHandler):
+    '''
+    @ 指令列表：
+    cmd:getname     :启动获取名字功能
+    mod:tts         :在线语音合成
+    mod:ser         :离线语音合成
+    aiui:ol         :在线语音识别
+    aiui:off        :离线语音识别
+    '''
+
     def handle(self):
         print('Got connection from', self.client_address)
         # Get message and client socket
