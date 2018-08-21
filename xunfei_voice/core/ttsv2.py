@@ -5,7 +5,7 @@ import hashlib
 import base64
 import serial
 
-from settings import SAVE_PATH, SAVE_FILE, V_MODE, SERI_TO_YY
+from settings import SAVE_PATH, SAVE_FILE, SERI_TO_YY
 from core import security
 
 # gen serial link to tts
