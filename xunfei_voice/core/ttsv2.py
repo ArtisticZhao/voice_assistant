@@ -61,8 +61,12 @@ def tts(string, mode):
 
 
 def tts_ser(string):
-    send_data = TTS_HEADER + string.decode('UTF-8').encode('GB2312') + '$'
+    if isinstance(string, unicode):
+        send_data = TTS_HEADER + string.encode('GB2312') + '$'
+    else:
+        send_data = TTS_HEADER + string.decode('UTF-8').encode('GB2312') + '$'
     ser_to_tts.write(send_data)
+    time.sleep(0.3 * len(string))
 
 
 def tts_xf(string):

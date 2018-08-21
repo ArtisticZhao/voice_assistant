@@ -26,7 +26,7 @@ class recoder:
         wf.close()
 
     def recoder(self):
-        logging.info('starting recoding')
+        logging.debug('starting recoding')
         pa = PyAudio()
         stream = pa.open(
             format=paInt16,
@@ -50,7 +50,7 @@ class recoder:
             large_sample_count = np.sum(audio_data > self.LEVEL)
             # TODO del this
             if REC_MODE == 'DEBUG':
-                logging.info(np.max(audio_data))
+                logging.debug(np.max(audio_data))
             # 如果个数大于COUNT_NUM，则至少保存SAVE_LENGTH个块
             if large_sample_count > self.COUNT_NUM:
                 save_count = self.SAVE_LENGTH
@@ -86,10 +86,10 @@ class recoder:
         have_wav = self.recoder()
         if have_wav:
             self.savewav(SAVE_REC)
-            logging.info('record finished')
+            logging.debug('record finished')
             return True
         else:
-            logging.info("no audio record")
+            logging.debug("no audio record")
             return False
 
 
