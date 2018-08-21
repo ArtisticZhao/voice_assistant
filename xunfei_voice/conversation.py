@@ -145,7 +145,7 @@ class Conversation(object):
             # 回答
             if intent_res.get('answer') is not None:
                 text_ans = intent_res['answer']['text']
-                logging.error(text_ans)
+                logging.info("reply: " + text_ans)
                 self.reply(text_ans)
             else:
                 logging.error('dont understand')
@@ -153,14 +153,10 @@ class Conversation(object):
             print "---->>>>>>>>error code !!!!!"
             try:
                 j_ans = json.loads(x_ans)
-                print json.dumps(
-                    j_ans,
-                    sort_keys=True,
-                    indent=4,
-                    separators=(',', ': '),
-                    ensure_ascii=False)
+                print j_ans
             except Exception as e:
                 logging.error(e)
+                print x_ans
                 print e
             print "error code !!!!!<<<<<<<<----"
 
