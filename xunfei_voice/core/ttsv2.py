@@ -4,6 +4,7 @@ import time
 import hashlib
 import base64
 import serial
+import logging
 
 from settings import SAVE_PATH, SAVE_FILE, SERI_TO_YY
 from core import security
@@ -55,7 +56,7 @@ def writeFile(file, content):
 
 def tts(string, mode):
     if mode == "xf":
-        tts_xf(string)
+        return tts_xf(string)
     else:
         tts_ser(string)
 
@@ -82,7 +83,7 @@ def tts_xf(string):
         print("success, sid = " + sid)
         return sid
     else:
-        print r.text
+        logging.error(r.text)
 
 
 if __name__ == '__main__':

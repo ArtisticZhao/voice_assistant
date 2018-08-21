@@ -15,7 +15,7 @@ SAVE_REC = os.path.join(SAVE_PATH, 'rec.wav')
 REC_LEVEL = 3000
 
 # voice mode
-V_MODE = "serial"  # "xf" or "serial"
+V_MODE = "xf"  # "xf" or "serial"
 A_MODE = "online"
 # serial
 SERI_TO_YY = "/dev/ttyUSB0"

@@ -1,6 +1,7 @@
 # coding:utf-8
 import serial
-from settings import SERI_TO_YY, SERI_TO_SK
+import logging
+from settings import SERI_TO_SK
 '''
 Start kit 接收的是语音模块的串口2指令，
 使用语音模块的串口转发功能进行转发
@@ -30,4 +31,6 @@ class Voice_Ctrl_Handler(object):
                 print 'forward'
                 self.ser.write('@IR#003&$')
                 return True
+        else:
+            logging.error("no serial dev")
         return False
