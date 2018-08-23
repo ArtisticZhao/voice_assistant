@@ -48,8 +48,9 @@ class motor_ctrl_seri(object):
             except Exception as e2:
                 print e2
                 self.ser = None
-        self.ser.flushInput()
-        self.ser.flushOutput()
+        if self.ser is not None:
+            self.ser.flushInput()
+            self.ser.flushOutput()
 
     def go_direct(self, direct):
         print direct
