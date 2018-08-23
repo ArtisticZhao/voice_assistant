@@ -6,15 +6,21 @@ import base64
 import serial
 import logging
 
-from settings import SAVE_PATH, SAVE_FILE, SERI_TO_YY
+from settings import SAVE_PATH, SAVE_FILE, V_MODE, SERI_TO_YY, UP2_IP, MAIN_PORT
 from core import security
+from socketer import socket_sender
 
 # gen serial link to tts
-try:
-    ser_to_tts = serial.Serial(SERI_TO_YY, 9600, timeout=0.5)
-except Exception as e:
-    print e
+if V_MODE == 'serial':
+    try:
+        ser_to_tts = serial.Serial(SERI_TO_YY, 9600, timeout=0.5)
+    except Exception as e:
+        print e
+        ser_to_tts = None
+else:
     ser_to_tts = None
+
+sender_to_main = socket_sender(UP2_IP, MAIN_PORT)  # to main
 
 TTS_HEADER = "@TextToSpeech#"  # add '$' to tail
 
@@ -57,8 +63,18 @@ def writeFile(file, content):
 def tts(string, mode):
     if mode == "xf":
         return tts_xf(string)
-    else:
+    elif mode == "serial":
         tts_ser(string)
+    else:
+        tts_remote(string)
+
+
+def tts_remote(string):
+    if isinstance(string, unicode):
+        sender_to_main.send_data(string.encode('UTF-8'))
+    else:
+        sender_to_main.send_data(string)
+    time.sleep(0.3 * len(string))
 
 
 def tts_ser(string):

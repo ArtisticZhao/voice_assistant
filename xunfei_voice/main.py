@@ -4,7 +4,6 @@ import time
 import threading
 import logging
 from conversation import Conversation
-from core.ttsv2 import ser_to_tts
 
 logging.basicConfig(
     level=logging.INFO,
@@ -37,26 +36,6 @@ class Handler(BaseRequestHandler):
                 # get name for facenet
                 logging.info("start get name mode")
                 c.is_getname_mode = True
-        elif msg.find('mod:') != -1:  # change voice mod
-            if msg == 'mod:tts':
-                logging.info("mode change! xf")
-                c.vmode = "xf"
-            else:
-                logging.info("mode change! serial")
-                c.vmode = "serial"
-        elif msg.find('aiui:') != -1:  # change aiui mod
-            if msg == 'aiui:ol':
-                logging.info("aiui mode change : ONLINE")
-                ser_to_tts.write('@AsrMode#2$')
-            else:
-                logging.info("aiui mode change : OFFLINE")
-                ser_to_tts.write('@AsrMode#1$')
-        else:
-            # speak mode
-            if c.vmode == 'xf':
-                c.tts_play(msg)
-            else:
-                c.tts_play(msg.decode('GB2312').encode('UTF-8'))
 
 
 class upper_socket_server(threading.Thread):

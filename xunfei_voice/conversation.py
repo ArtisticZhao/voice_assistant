@@ -8,7 +8,7 @@ import json
 from core.WebaiuiDemo import aiui
 from core.ttsv2 import tts
 from core.play_music import play_sound
-from settings import SAVE_FILE, V_MODE, A_MODE
+from settings import SAVE_FILE, V_MODE, A_MODE, UP2_IP, NAVI_PORT, FACE_PORT
 from record.record import recoder
 from handler import Voice_Ctrl_Handler
 from socketer import socket_sender
@@ -22,12 +22,13 @@ class Conversation(object):
         self.isconversation = False
         self.handler = Voice_Ctrl_Handler()
         self.is_getname_mode = False
-        self.sender = socket_sender('localhost', 20001)  # to facenet
-        self.sender_to_navi = socket_sender('192.168.20.136', 20000)  # to navi
+        self.sender = socket_sender(UP2_IP, FACE_PORT)  # to facenet
+        self.sender_to_navi = socket_sender(UP2_IP, NAVI_PORT)  # to navi
         self.vmode = V_MODE
         self.aiuimode = A_MODE
 
     def aiui_iat(self):
+        print "recording"
         while (not self.iat_recoder.recode_wav()):
             # waiting input
             pass
@@ -65,11 +66,14 @@ class Conversation(object):
                 yes_or_no = self.aiui_iat()
                 while (type(yes_or_no) != unicode):
                     self.tts_play("正确或错误?")
+                    print "recoding"
                     yes_or_no = self.aiui_iat()
                 yes_or_no = str(yes_or_no.encode('UTF-8'))
                 if '正确' in yes_or_no:
                     self.is_getname_mode = False
                     self.sender.send_data(name_str)
+
+                    self.tts_play("录制成功！")
                     logging.info("done get name")
                     break
                 elif '错误' in yes_or_no:

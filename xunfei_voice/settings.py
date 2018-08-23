@@ -15,7 +15,7 @@ SAVE_REC = os.path.join(SAVE_PATH, 'rec.wav')
 REC_LEVEL = 3000
 
 # voice mode
-V_MODE = "xf"  # "xf" or "serial"
+V_MODE = "remote"  # "xf" or "serial" or "remote"
 A_MODE = "online"
 # serial
 SERI_TO_YY = "/dev/ttyUSB0"
@@ -23,3 +23,9 @@ SERI_TO_SK = "/dev/ttyACM0"
 
 # recorder mode
 REC_MODE = 'RELEASE'  # 'DEBUG' to show rec_level
+
+# net config
+UP2_IP = '192.168.20.136'
+NAVI_PORT = 20002
+FACE_PORT = 20001
+MAIN_PORT = 20000
