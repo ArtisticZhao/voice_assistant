@@ -4,7 +4,7 @@ import logging
 import serial
 
 GO_LIST = ["chair", "box", "door"]
-ROS_PORT = 20000
+ROS_PORT = 20002
 SERIAL_LISTEN = '/dev/ttyUSB0'
 SERIAL_TO_SK = '/dev/ttyACM0'
 SERIAL_TO_SK1 = '/dev/ttyACM1'
@@ -35,6 +35,10 @@ class serial_listener(object):
                     logging.info("serial from voicemodel:motor ctrl:" +
                                  str(data))
                     self.ser_to_sk.go_direct(str(data))
+                elif data == 100 or data == 101 or data == 102:
+                    logging.info("serial from voicemodel:goal ctrl:" +
+                                 str(data))
+                    self.ss.send_data("Goal:" + GO_LIST[data % 100])
 
 
 class motor_ctrl_seri(object):
