@@ -2,7 +2,7 @@
 import time
 import serial
 
-SERI_TO_YY = '/dev/ttyUSB0'
+SERI_TO_YY = '/dev/ttyUSB1'
 
 # gen serial link to tts
 try:

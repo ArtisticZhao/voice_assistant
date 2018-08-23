@@ -43,7 +43,11 @@ class motor_ctrl_seri(object):
             self.ser = serial.Serial(SERIAL_TO_SK, 9600, timeout=0.5)
         except Exception as e:
             print e
-            self.ser = serial.Serial(SERIAL_TO_SK1, 9600, timeout=0.5)
+            try:
+                self.ser = serial.Serial(SERIAL_TO_SK1, 9600, timeout=0.5)
+            except Exception as e2:
+                print e2
+                self.ser = None
         self.ser.flushInput()
         self.ser.flushOutput()
 
@@ -51,7 +55,10 @@ class motor_ctrl_seri(object):
         print direct
         if direct == '1' or direct == '2' or direct == '3':
             print('->send:' + 'qwer00' + direct + 'q')
-            self.ser.write('qwer00' + direct + 'q')
+            if self.ser is not None:
+                self.ser.write('qwer00' + direct + 'q')
+            else:
+                print("no motor dev")
 
 
 if __name__ == '__main__':
