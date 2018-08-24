@@ -13,6 +13,9 @@ class Voice_Ctrl_Handler(object):
         self.sender_to_trigger = socket_sender(UP2_IP, FACE_TRIGGER_PORT)
 
     def switch(self, text):
+        '''
+        returns: True 代表识别到了关键词， 结束一次conversation！
+        '''
         if text.find(u'向左看') != -1:
             print 'left'
             self.sender_to_main.send_data('motor:2')
@@ -28,4 +31,8 @@ class Voice_Ctrl_Handler(object):
         elif text.find(u'录入人脸') != -1:
             print 'rec face'
             self.sender_to_trigger.send_data('start:getface')
+            return True
+        elif text.find(u'启动识别') != -1:
+            print "start shibie"
+            self.sender_to_trigger.send_data('start:facerun')
             return True
